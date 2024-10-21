@@ -46,6 +46,17 @@ pipeline {
                 }
             }
         }
+        stage('[OSV-Scanner] Dependency Scan') {
+            steps {
+                sh 'mkdir -p results/'
+                sh '''
+                    docker run --rm -v ${WORKSPACE}:/data \
+                        ghcr.io/google/osv-scanner:latest \
+                        --lockfile /data/package-lock.json \
+                        --json > results/osv_scan_report.json
+                '''
+            }
+        }
     }
     post {
         always {
@@ -53,6 +64,12 @@ pipeline {
                 artifact: 'results/zap_xml_report.xml', 
                 productName: 'Juice Shop', 
                 scanType: 'ZAP Scan', 
+                engagementName: 'szymon.mytych@protonmail.com'
+            )
+            defectDojoPublisher(
+                artifact: 'results/osv_scan_report.json', 
+                productName: 'Juice Shop', 
+                scanType: 'OSV-Scanner JSON', 
                 engagementName: 'szymon.mytych@protonmail.com'
             )
         }

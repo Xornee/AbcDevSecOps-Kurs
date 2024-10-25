@@ -45,6 +45,7 @@ pipeline {
                     '''
                 }
             }
+
         }
         stage('[OSV-Scanner] Dependency Scan') {
             steps {

@@ -51,7 +51,7 @@ pipeline {
             steps {
                 sh 'mkdir -p results/'
                 sh '''
-                    docker run --rm -v home/smytych/DevSecOps/AbcDevSecOps-Kurs:/data \
+                    docker run --rm -v /home/smytych/DevSecOps/AbcDevSecOps-Kurs:/data \
                         ghcr.io/google/osv-scanner:latest \
                         --lockfile /data/package-lock.json \
                         --json > results/osv_scan_report.json

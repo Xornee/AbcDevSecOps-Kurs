@@ -61,16 +61,16 @@ pipeline {
     }
     post {
         always {
-            defectDojoPublisher(
-                artifact: 'results/zap_xml_report.xml', 
-                productName: 'Juice Shop', 
-                scanType: 'ZAP Scan', 
-                engagementName: 'szymon.mytych@protonmail.com'
-            )
+            // defectDojoPublisher(
+            //     artifact: 'results/zap_xml_report.xml', 
+            //     productName: 'Juice Shop', 
+            //     scanType: 'ZAP Scan', 
+            //     engagementName: 'szymon.mytych@protonmail.com'
+            // )
             defectDojoPublisher(
                 artifact: 'results/osv_scan_report.json', 
                 productName: 'Juice Shop', 
-                scanType: 'OSV-Scanner JSON', 
+                scanType: 'OSV Scan', 
                 engagementName: 'szymon.mytych@protonmail.com'
             )
         }

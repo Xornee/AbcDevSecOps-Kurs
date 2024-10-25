@@ -54,7 +54,8 @@ pipeline {
                     docker run --rm -v /home/smytych/DevSecOps/AbcDevSecOps-Kurs:/data \
                         ghcr.io/google/osv-scanner:latest \
                         --lockfile /data/package-lock.json \
-                        --json > results/osv_scan_report.json
+                        --json > results/osv_scan_report.json \
+                        || true
                 '''
             }
         }

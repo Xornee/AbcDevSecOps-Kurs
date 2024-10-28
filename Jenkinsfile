@@ -84,9 +84,9 @@ pipeline {
             steps {
                 sh 'mkdir -p results/'
                 sh '''
-                    docker run --rm -u root -v $PWD:/data \
+                    docker run --rm -v $PWD:/data \
                         trufflesecurity/trufflehog:latest \
-                        git file:///data --branch main --json > results/trufflehog_report.json || true
+                        git --repo-path /data --branch main --json --debug > results/trufflehog_report.json || true
                 '''
             }
         }

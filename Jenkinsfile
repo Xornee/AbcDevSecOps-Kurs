@@ -47,15 +47,25 @@ pipeline {
         //     }
 
         // }
-        stage('[OSV-Scanner] Dependency Scan') {
+        // stage('[OSV-Scanner] Dependency Scan') {
+        //     steps {
+        //         sh 'mkdir -p results/'
+        //         sh '''
+        //             docker run --rm -v /home/smytych/DevSecOps/AbcDevSecOps-Kurs:/data \
+        //                 ghcr.io/google/osv-scanner:latest \
+        //                 --lockfile /data/package-lock.json \
+        //                 --json > results/osv_scan_report.json \
+        //                 || true
+        //         '''
+        //     }
+        // }
+        stage('[TruffleHog] Secret Scan') {
             steps {
                 sh 'mkdir -p results/'
                 sh '''
-                    docker run --rm -v /home/smytych/DevSecOps/AbcDevSecOps-Kurs:/data \
-                        ghcr.io/google/osv-scanner:latest \
-                        --lockfile /data/package-lock.json \
-                        --json > results/osv_scan_report.json \
-                        || true
+                    docker run --rm -v $PWD:/data \
+                        trufflesecurity/trufflehog:latest \
+                        git file:///data --branch main --json > results/trufflehog_report.json || true
                 '''
             }
         }
@@ -68,10 +78,16 @@ pipeline {
             //     scanType: 'ZAP Scan', 
             //     engagementName: 'szymon.mytych@protonmail.com'
             // )
+            // defectDojoPublisher(
+            //     artifact: 'results/osv_scan_report.json', 
+            //     productName: 'Juice Shop', 
+            //     scanType: 'OSV Scan', 
+            //     engagementName: 'szymon.mytych@protonmail.com'
+            // )
             defectDojoPublisher(
-                artifact: 'results/osv_scan_report.json', 
+                artifact: 'results/trufflehog_report.json', 
                 productName: 'Juice Shop', 
-                scanType: 'OSV Scan', 
+                scanType: 'Trufflehog Scan', 
                 engagementName: 'szymon.mytych@protonmail.com'
             )
         }

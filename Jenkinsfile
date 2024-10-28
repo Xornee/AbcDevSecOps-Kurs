@@ -8,12 +8,24 @@ pipeline {
             steps {
                 script {
                     cleanWs()
-                    git credentialsId: 'github-pat', url: 'https://github.com/Xornee/AbcDevSecOps-Kurs/', branch: 'main', extensions: [
-                        [$class: 'CloneOption', noTags: false, shallow: false, depth: 0]
-                    ]
+                    checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: '*/main']],
+                        doGenerateSubmoduleConfigurations: false,
+                        extensions: [
+                            [$class: 'CloneOption', noTags: false, shallow: false, depth: 0],
+                            [$class: 'CleanBeforeCheckout']
+                        ],
+                        submoduleCfg: [],
+                        userRemoteConfigs: [[
+                            credentialsId: 'github-pat',
+                            url: 'https://github.com/Xornee/AbcDevSecOps-Kurs/'
+                        ]]
+                    ])
                 }
             }
         }
+
         stage('Prepare') {
             steps {
                 sh 'mkdir -p results/'
@@ -21,10 +33,10 @@ pipeline {
         }
         stage('Debug') {
             steps {
-                sh 'ls -la'
-                sh 'ls -la .git'
+                sh 'git log -n 5 --pretty=oneline'
             }
         }
+
 
         // stage('[ZAP] Baseline passive-scan') {
         //     steps {
@@ -72,12 +84,13 @@ pipeline {
             steps {
                 sh 'mkdir -p results/'
                 sh '''
-                    docker run --rm -v $PWD:/data \
+                    docker run --rm -u root -v $PWD:/data \
                         trufflesecurity/trufflehog:latest \
                         git file:///data --branch main --json > results/trufflehog_report.json || true
                 '''
             }
         }
+
     }
     post {
         always {

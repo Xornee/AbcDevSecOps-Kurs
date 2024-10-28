@@ -8,7 +8,9 @@ pipeline {
             steps {
                 script {
                     cleanWs()
-                    git credentialsId: 'github-pat', url: 'https://github.com/Xornee/AbcDevSecOps-Kurs/', branch: 'main'
+                    git credentialsId: 'github-pat', url: 'https://github.com/Xornee/AbcDevSecOps-Kurs/', branch: 'main', extensions: [
+                        [$class: 'CloneOption', noTags: false, shallow: false, depth: 0]
+                    ]
                 }
             }
         }
@@ -17,6 +19,13 @@ pipeline {
                 sh 'mkdir -p results/'
             }
         }
+        stage('Debug') {
+            steps {
+                sh 'ls -la'
+                sh 'ls -la .git'
+            }
+        }
+
         // stage('[ZAP] Baseline passive-scan') {
         //     steps {
         //         sh 'mkdir -p results/'

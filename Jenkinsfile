@@ -31,11 +31,12 @@ pipeline {
                 sh 'mkdir -p results/'
             }
         }
-        stage('Debug') {
+        stage('Debug Data Directory') {
             steps {
-                sh 'git log -n 5 --pretty=oneline'
+                sh 'ls -R /var/jenkins_home/workspace/ABCDPipeline'
             }
         }
+
 
 
         // stage('[ZAP] Baseline passive-scan') {

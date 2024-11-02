@@ -34,6 +34,8 @@ pipeline {
         stage('Debug Data Directory') {
             steps {
                 sh 'ls -R /var/jenkins_home/workspace/ABCDPipeline'
+                sh 'pwd'
+                sh 'ls -latr'
             }
         }
 

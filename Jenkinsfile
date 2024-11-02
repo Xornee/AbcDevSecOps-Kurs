@@ -80,16 +80,17 @@ pipeline {
         //         '''
         //     }
         // }
-        stage('[TruffleHog] Secret Scan') {
-            steps {
-                sh 'mkdir -p results/'
-                sh '''
-                    docker run --rm -v $PWD:/data \
-                        trufflesecurity/trufflehog:latest \
-                        git --repo-path /data --branch main --json --debug > results/trufflehog_report.json || true
-                '''
-            }
+    stage('[TruffleHog] Secret Scan') {
+        steps {
+            sh 'mkdir -p results/'
+            sh '''
+                docker run --rm -v $PWD:/data \
+                    trufflesecurity/trufflehog:latest \
+                    --json --branch main --debug /data > results/trufflehog_report.json || true
+            '''
         }
+    }
+
 
     }
     post {

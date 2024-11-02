@@ -125,7 +125,7 @@ pipeline {
             // defectDojoPublisher(
             //     artifact: 'results/semgrep_report.json',
             //     productName: 'Juice Shop',
-            //     scanType: 'Semgrep Scan',
+            //     scanType: 'Semgrep JSON Report',
             //     engagementName: 'szymon.mytych@protonmail.com'
             // )
         }

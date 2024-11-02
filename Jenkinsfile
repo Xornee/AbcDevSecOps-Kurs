@@ -86,7 +86,7 @@ pipeline {
             sh '''
                 docker run --rm -v $PWD:/data \
                     trufflesecurity/trufflehog:latest \
-                    --json --branch main --debug /data > results/trufflehog_report.json || true
+                    --json --debug /data > results/trufflehog_report.json || true
             '''
         }
     }

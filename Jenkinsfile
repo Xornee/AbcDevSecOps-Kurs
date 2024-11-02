@@ -1,8 +1,17 @@
+
 pipeline {
     agent any
+    environment {
+      // SEMGREP_BASELINE_REF = ""
+
+        SEMGREP_APP_TOKEN = credentials('SEMGREP_APP_TOKEN')
+        SEMGREP_PR_ID = "${env.CHANGE_ID}"
+
+      //  SEMGREP_TIMEOUT = "300"
+    }
     options {
         skipDefaultCheckout(true)
-    }
+    } 
     stages {
         stage('Code checkout from GitHub') {
             steps {
@@ -83,14 +92,13 @@ pipeline {
 
         //     }
         // }
-        stage('[Semgrep] Code Analysis') {
-            steps {
-                sh 'mkdir -p results/'
-                sh '''
-                    docker run --rm -v "$PWD:/src" returntocorp/semgrep:latest \
-                    semgrep scan --config auto --output /src/results/semgrep_report.json /src || true
-                '''
-            }
+        stages {
+          stage('Semgrep-Scan') {
+              steps {
+                sh 'pip3 install semgrep'
+                sh 'semgrep ci'
+              }
+          }
         }
     }
     post {

@@ -87,9 +87,7 @@ pipeline {
             steps {
                 sh 'mkdir -p results/'
                 sh '''
-                    docker run --rm -v $PWD:/data \
-                        trufflesecurity/trufflehog:latest \
-                        filesystem --json --debug --depth 10 /data > results/trufflehog_report.json || true
+                    docker run --rm -it -v "$PWD:/pwd" trufflesecurity/trufflehog:latest github --repo https://github.com/Xornee/AbcDevSecOps-Kurs/tree/main || true
                 '''
 
             }
